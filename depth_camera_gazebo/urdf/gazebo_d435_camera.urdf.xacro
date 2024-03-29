@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<robot name="realsense2_camera" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:arg name="use_nominal_extrinsics" default="false"/>
+  <xacro:arg name="add_plug" default="false" />
+  <xacro:arg name="use_mesh" default="true" />
+  <xacro:arg name="name" default="camera" />
+  <xacro:arg name="topics_ns" default="camera" />
+  <xacro:arg name="publish_pointcloud" default="false" />
+  <xacro:arg name="static" default="true" />
+  <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro" />
+  <xacro:include filename="$(find depth_camera_gazebo)/urdf/_d435.gazebo.xacro" />
+
+  <link name="base_link" />
+  <xacro:sensor_d435 
+    parent="base_link" 
+    use_nominal_extrinsics="$(arg use_nominal_extrinsics)" 
+    add_plug="$(arg add_plug)" 
+    use_mesh="$(arg use_mesh)">
+
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:sensor_d435>
+
+  <!-- Realsense Gazebo Plugin -->
+  <xacro:gazebo_d435 
+      camera_name="$(arg name)" 
+      reference_link="$(arg name)_link" 
+      topics_ns="$(arg topics_ns)" 
+      depth_optical_frame="$(arg name)_depth_optical_frame" 
+      color_optical_frame="$(arg name)_color_optical_frame" 
+      infrared1_optical_frame="$(arg name)_left_ir_optical_frame" 
+      infrared2_optical_frame="$(arg name)_right_ir_optical_frame" 
+      publish_pointcloud="$(arg publish_pointcloud)"
+      static="$(arg static)"
+  />
+</robot>
